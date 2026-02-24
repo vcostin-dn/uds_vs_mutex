@@ -1,12 +1,23 @@
 #!/bin/bash
 set -e
 
-./build.sh Release
-BINARY="build/bin/uds_vs_mutex"
+BUILD_TYPE="${1:-Release}"
+
+case "${BUILD_TYPE,,}" in
+    release)        BUILD_DIR="build" ;;
+    debug)          BUILD_DIR="debug" ;;
+    asan)           BUILD_DIR="asan" ;;
+    *)
+        echo "Unknown build type: $BUILD_TYPE"
+        echo "Usage: $0 [Release|Debug|ASan]"
+        exit 1
+        ;;
+esac
+
+BINARY="$BUILD_DIR/bin/uds_vs_mutex"
 
 if [ ! -f "$BINARY" ]; then
-    echo "Binary not found. Run ./build.sh first."
-    exit 1
+    ./build.sh "$BUILD_TYPE"
 fi
 
 "$BINARY"
