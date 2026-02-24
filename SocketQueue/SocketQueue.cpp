@@ -27,19 +27,38 @@ SocketQueue::SocketQueue(const std::string path)
     mSocketPath = path;
 }
 
+SocketQueue::~SocketQueue()
+{
+    if (mListenFd >= 0) {
+        close(mListenFd);
+        mListenFd = -1;
+    }
+    if (mConsumerFd >= 0) {
+        close(mConsumerFd);
+        mConsumerFd = -1;
+    }
+    if (mProducerFd >= 0) {
+        close(mProducerFd);
+        mProducerFd = -1;
+    }
+}
+
 void SocketQueue::waitForConsumer()
 {
 #ifdef DEBUG
     std::cout << "Waiting for consumer" << std::endl;
 #endif
+    if (mConsumerFd >= 0) {
+        close(mConsumerFd);
+        mConsumerFd = -1;
+    }
+
     auto ret = accept(mListenFd, nullptr, nullptr);
     assert(ret >= 0);
     mConsumerFd = ret;
 #ifdef DEBUG
     std::cout << "Consumer connected" << std::endl;
 #endif
-    //close(mListenFd);
-    //mListenFd = -1;
 }
 
 void SocketQueue::connectToProducer()
@@ -47,6 +66,11 @@ void SocketQueue::connectToProducer()
 #ifdef DEBUG
     std::cout << "Connecting to producer" << std::endl;
 #endif
+    if (mProducerFd >= 0) {
+        close(mProducerFd);
+        mProducerFd = -1;
+    }
+
     auto ret = socket(AF_UNIX, SOCK_SEQPACKET, 0);
     mProducerFd = ret;
 
@@ -120,4 +144,16 @@ void SocketQueue::receiveMessage(std::function<void(std::string&)> consumeCb)
 
     std::string message(buf, n);
     consumeCb(message);
+}
+
+void SocketQueue::cleanup()
+{
+    if (mConsumerFd >= 0) {
+        close(mConsumerFd);
+        mConsumerFd = -1;
+    }
+    if (mProducerFd >= 0) {
+        close(mProducerFd);
+        mProducerFd = -1;
+    }
 }
