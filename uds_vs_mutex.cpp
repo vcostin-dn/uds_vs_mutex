@@ -27,7 +27,7 @@ void workload(std::string& message)
 void test_thread_safe_queue(sbench::SBench& bench)
 {
     DEBUG_PRINT("test_thread_safe_queue");
-    ThreadSafeQueue thread_safe_queue;
+    ThreadSafeQueue<std::string> thread_safe_queue;
 
     std::thread producer([&thread_safe_queue]() {
         for (int i = 0; i < NUM_MESSAGES; i++) {
@@ -64,7 +64,7 @@ void test_thread_safe_queue(sbench::SBench& bench)
 void test_thread_safe_queue_optimized(sbench::SBench& bench)
 {
     DEBUG_PRINT("test_thread_safe_queue_optimized");
-    ThreadSafeQueueOptimized thread_safe_queue_optimized;
+    ThreadSafeQueueOptimized<std::string> thread_safe_queue_optimized;
 
     std::thread producer([&thread_safe_queue_optimized]() {
         for (int i = 0; i < NUM_MESSAGES; i++) {
@@ -89,7 +89,7 @@ void test_thread_safe_queue_optimized(sbench::SBench& bench)
         }
     });
 
-    bench.run("test_thread_safe_queue_optimized", [&]() {
+    bench.run("thread_safe_queue_optimized", [&]() {
         producer.join();
         consumer.join();
     });
@@ -98,10 +98,10 @@ void test_thread_safe_queue_optimized(sbench::SBench& bench)
     DEBUG_PRINT("--------------------------------\n\n");
 }
 
-void test_socket_queue(sbench::SBench& bench)
+void test_socket_queue_packet(sbench::SBench& bench)
 {
-    DEBUG_PRINT("test_socket_queue");
-    SocketQueue socket_queue("/tmp/mvi_socket_queue");
+    DEBUG_PRINT("test_socket_queue_packet");
+    SocketQueuePacket socket_queue("/tmp/mvi_socket_queue");
 
     std::thread producer([&socket_queue]() {
         socket_queue.waitForConsumer();

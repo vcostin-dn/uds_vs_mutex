@@ -22,10 +22,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Create header-only library target
-add_library(thread_safe_queue STATIC ThreadSafeQueue.cpp)
-target_include_directories(thread_safe_queue PUBLIC
+add_library(thread_safe_queue INTERFACE)
+target_include_directories(thread_safe_queue INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:include>
 )
-
-target_compile_options(thread_safe_queue PRIVATE -O3 -DNDEBUG)
