@@ -28,4 +28,4 @@ esac
 cmake -S . -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE="$CMAKE_TYPE"
 cmake --build "$BUILD_DIR" --parallel "$(nproc)"
 
-echo "Build complete. Binary: $BUILD_DIR/bin/uds_vs_mutex"
+echo "Build complete. Binary: $BUILD_DIR/bin/main"

@@ -37,13 +37,13 @@ FetchContent_MakeAvailable(
 add_subdirectory(ThreadSafeQueue)
 add_subdirectory(SocketQueue)
 
-add_executable(uds_vs_mutex uds_vs_mutex.cpp)
-target_link_libraries(uds_vs_mutex PRIVATE sbench socket_queue thread_safe_queue)
-target_compile_options(uds_vs_mutex PRIVATE -O3 -DNDEBUG)
+add_executable(main main.cpp tests_string_packet.cpp tests_string_stream.cpp tests_pointer_stream.cpp)
+target_link_libraries(main PRIVATE sbench socket_queue thread_safe_queue)
+target_compile_options(main PRIVATE -O3 -DNDEBUG)
 
 add_custom_target(run
-    COMMAND ${CMAKE_BINARY_DIR}/bin/uds_vs_mutex
-    DEPENDS uds_vs_mutex
+    COMMAND ${CMAKE_BINARY_DIR}/bin/main
+    DEPENDS main
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    COMMENT "Running uds_vs_mutex..."
+    COMMENT "Running benchmark..."
 )

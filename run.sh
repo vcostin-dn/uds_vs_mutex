@@ -14,10 +14,8 @@ case "${BUILD_TYPE,,}" in
         ;;
 esac
 
-BINARY="$BUILD_DIR/bin/uds_vs_mutex"
+BINARY="$BUILD_DIR/bin/main"
 
-if [ ! -f "$BINARY" ]; then
-    ./build.sh "$BUILD_TYPE"
-fi
+./build.sh "$BUILD_TYPE"
 
 "$BINARY"
