@@ -101,3 +101,36 @@ void test_pointer_thread_safe_queue_optimized(sbench::SBench& bench)
     DEBUG_PRINT("Done");
     DEBUG_PRINT("--------------------------------\n\n");
 }
+
+void test_pointer_ring_buffer(sbench::SBench& bench)
+{
+    DEBUG_PRINT("test_string_ring_buffer");
+    RingBuffer<void*> ring_buffer(1024);
+    generate_messages();
+
+    std::thread producer([&ring_buffer]() {
+        for (int i = 0; i < NUM_MESSAGES; ++i) {
+            while (!ring_buffer.push(&messages[i])) {
+                std::this_thread::yield();
+            }
+        }
+    });
+
+    std::thread consumer([&ring_buffer]() {
+        for (int i = 0; i < NUM_MESSAGES; ++i) {
+            void* message = nullptr;
+            while (!ring_buffer.pop(message)) {
+                std::this_thread::yield();
+            }
+            workload_pointer(message);
+        }
+    });
+
+    bench.run("ring buffer", [&]() {
+        producer.join();
+        consumer.join();
+    });
+
+    DEBUG_PRINT("Done");
+    DEBUG_PRINT("--------------------------------\n\n");
+}

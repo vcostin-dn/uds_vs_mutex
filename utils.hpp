@@ -6,6 +6,7 @@
 #include <sbench.hpp>
 #include "ThreadSafeQueue/ThreadSafeQueue.hpp"
 #include "SocketQueue/SocketQueue.hpp"
+#include "RingBuffer/RingBuffer.hpp"
 
 #ifdef DEBUG
     constexpr int NUM_MESSAGES = 3;
@@ -29,9 +30,11 @@ void generate_messages();
 void test_string_socket_queue_packet(sbench::SBench& bench);
 void test_string_thread_safe_queue(sbench::SBench& bench);
 void test_string_thread_safe_queue_optimized(sbench::SBench& bench);
+void test_string_ring_buffer(sbench::SBench& bench);
 
 void test_string_socket_queue_stream(sbench::SBench& bench);
 
 void test_pointer_socket_queue_stream(sbench::SBench& bench);
 void test_pointer_thread_safe_queue(sbench::SBench& bench);
 void test_pointer_thread_safe_queue_optimized(sbench::SBench& bench);
+void test_pointer_ring_buffer(sbench::SBench& bench);

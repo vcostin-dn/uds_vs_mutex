@@ -96,3 +96,35 @@ void test_string_thread_safe_queue_optimized(sbench::SBench& bench)
     DEBUG_PRINT("Done");
     DEBUG_PRINT("--------------------------------\n\n");
 }
+
+void test_string_ring_buffer(sbench::SBench& bench)
+{
+    DEBUG_PRINT("test_string_ring_buffer");
+    RingBuffer<std::string> ring_buffer(1024);
+
+    std::thread producer([&ring_buffer]() {
+        for (int i = 0; i < NUM_MESSAGES; ++i) {
+            while (!ring_buffer.push("Hello, world! " + std::to_string(i))) {
+                std::this_thread::yield();
+            }
+        }
+    });
+
+    std::thread consumer([&ring_buffer]() {
+        for (int i = 0; i < NUM_MESSAGES; ++i) {
+            std::string message;
+            while (!ring_buffer.pop(message)) {
+                std::this_thread::yield();
+            }
+            workload(message);
+        }
+    });
+
+    bench.run("ring buffer", [&]() {
+        producer.join();
+        consumer.join();
+    });
+
+    DEBUG_PRINT("Done");
+    DEBUG_PRINT("--------------------------------\n\n");
+}

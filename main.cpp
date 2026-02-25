@@ -34,6 +34,7 @@ int main()
         test_string_socket_queue_stream(bench);
         test_string_thread_safe_queue(bench);
         test_string_thread_safe_queue_optimized(bench);
+        test_string_ring_buffer(bench);
     }
 
     {
@@ -41,6 +42,7 @@ int main()
         test_pointer_socket_queue_stream(bench);
         test_pointer_thread_safe_queue(bench);
         test_pointer_thread_safe_queue_optimized(bench);
+        test_pointer_ring_buffer(bench);
     }
 
     {
@@ -48,6 +50,7 @@ int main()
         test_pointer_socket_queue_stream(bench);
         test_string_thread_safe_queue(bench);
         test_string_thread_safe_queue_optimized(bench);
+        test_string_ring_buffer(bench);
     }
 
     return 0;
