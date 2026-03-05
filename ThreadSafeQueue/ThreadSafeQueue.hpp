@@ -29,7 +29,8 @@ public:
     void waitMessages()
     {
         std::unique_lock<std::mutex> lock(m_queue_mutex);
-        m_queue_condition.wait(lock, [this] { return !m_queue.empty(); });
+        if (m_queue.empty())
+            m_queue_condition.wait(lock, [this] { return !m_queue.empty(); });
     }
 
     size_t processMessages(std::function<void(T&)> consumeCb)
@@ -77,7 +78,8 @@ public:
     void waitMessages()
     {
         std::unique_lock<std::mutex> lock(m_adding_queue_mutex);
-        m_adding_queue_condition.wait(lock, [this] { return !m_adding_queue.empty(); });
+        if (m_adding_queue.empty())
+            m_adding_queue_condition.wait(lock, [this] { return !m_adding_queue.empty(); });
     }
 
     size_t processMessages(std::function<void(T&)> consumeCb)
