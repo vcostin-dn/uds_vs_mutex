@@ -7,9 +7,10 @@ case "${BUILD_TYPE,,}" in
     release)        BUILD_DIR="build" ;;
     debug)          BUILD_DIR="debug" ;;
     asan)           BUILD_DIR="asan" ;;
+    dbg)            BUILD_DIR="dbg" ;;
     *)
         echo "Unknown build type: $BUILD_TYPE"
-        echo "Usage: $0 [Release|Debug|ASan]"
+        echo "Usage: $0 [Release|Debug|ASan|Dbg]"
         exit 1
         ;;
 esac
